@@ -1,34 +1,41 @@
-# cmv los robles tests
+#Automation Strategy for CMV Los Robles
 
-This project tests the functionalities of page cmvlosrobles[dot]cl.
+##Project Structure
 
-## Usage
+The suite is organized into a standard Maven project structure:
 
-Use [maven](https://maven.apache.org/) to build and execute tests.
+* `src/main/java`: Contains Page Objects and Base Setup.
+* `src/test/java`: Contains Test Classes and Data Providers.
+* `pom.xml`: Dependency management (Selenium, TestNG, WebDriverManager).
 
-```bash
-mvn clean test
-```
+##Deployment Options
 
-## Execution Status
+* Local: Run via `mvn test`.
+* CI/CD (GitHub Actions/Jenkins): Integrated into a pipeline using the provided `headless` mode configuration.
+* Docker: A `Dockerfile` can wrap the Maven image to ensure a consistent execution environment (Chrome/Firefox drivers included).
 
-TO-DO: Add travis CI Badges.
+### Execution and Reporting Steps
 
-## Dependencies
+1. **Clone/Set up:** Save the files into a standard Maven folder structure.
+2. **Run Tests:** Use the terminal to execute `mvn clean test`
+3.  **Generate Allure Report (Optional):**
+If you have Allure installed, run:
+allure serve allure-results
+4.  **CI/CD Recommendation:**
+Use a `Jenkinsfile` or `.github/workflows/main.yml` to trigger `mvn test` on every push to your repository. Since the site uses some dynamic loading, the `WebDriverWait` (implicit in the `BaseTest`) ensures stability against network latency.
 
-This project depends on:
-* TBD
+##Reporting
 
-More information on the [pom](pom.xml)
+* Allure Report: Highly recommended for experts. It provides screenshots on failure, step-by-step logs, and historical trends.
+* TestNG HTML: Native, lightweight report generated in the 'target/surefire-reports' folder.
 
-## Changelog
+##Architectural Overview
 
-[Changelog](Changelog.md)
+* Language: Java (fits your expertise in Maven/Java/Groovy).
+* Pattern: Page Object Model with Page Factory for clean element management.
+* Reporting: Allure Reports (modern, interactive) or standard TestNG reports.
+* Deployment: Containerized via Docker for CI/CD portability.
 
-## Contributing
+##Tech
 
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-## License
-
-[LICENSE](LICENSE)
+Java, Selenium, Maven, and TestNG

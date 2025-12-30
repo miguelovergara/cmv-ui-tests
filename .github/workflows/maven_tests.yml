@@ -1,5 +1,6 @@
 name: UI Cron Smoke Tests
 
+#to be executed every 1 hour
 on:
   schedule:
     - cron: '0 * * * *'
@@ -20,8 +21,7 @@ jobs:
         cache: maven
 
     - name: Run UI Tests
-      # BaseTest.java is already configured to detect GITHUB_ACTIONS 
-      # and apply --headless=new and --no-sandbox automatically.
+      # BaseTest.java is already configured to detect GITHUB_ACTIONS and apply --headless=new and --no-sandbox automatically.
       run: mvn clean test -Dbrowser=chrome --batch-mode
 
     - name: Upload Test Results

@@ -7,16 +7,15 @@
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
-        <selenium.version>4.16.1</selenium.version>
-        <testng.version>7.8.0</testng.version>
     </properties>
 
     <dependencies>
+	
         <!-- Selenium WebDriver -->
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
-            <version>${selenium.version}</version>
+            <version>4.39.0</version>
         </dependency>
         
         <!-- WebDriverManager for automatic driver binary management -->
@@ -30,7 +29,15 @@
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
-            <version>${testng.version}</version>
+            <version>7.11.0</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- SLF4J Simple Implementation (Fixes the warning) -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>2.0.17</version>
             <scope>test</scope>
         </dependency>
 
@@ -41,4 +48,20 @@
             <version>2.24.0</version>
         </dependency>
     </dependencies>
+	
+	<build>
+		<pluginManagement>
+			<plugins>
+
+				<!-- maven-surefire-plugin -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>3.5.4</version>
+				</plugin>
+
+			</plugins>
+		</pluginManagement>
+	</build>
+	
 </project>

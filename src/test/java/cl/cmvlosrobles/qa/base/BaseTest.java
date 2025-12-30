@@ -25,6 +25,14 @@ public class BaseTest {
         driver.get(BASE_URL);
     }
 
+    /**
+     * Public getter for the WebDriver instance.
+     * Required by the TestListener to capture screenshots on failure.
+     */
+    public WebDriver getDriver() {
+        return driver;
+    }
+
     @AfterMethod
     public void tearDown() {
         if (driver != null) {

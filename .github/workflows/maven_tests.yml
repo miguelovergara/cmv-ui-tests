@@ -1,11 +1,9 @@
-name: UI Regression Tests
+name: UI Cron Smoke Tests
 
-# to be executed on PR and merge
+#to be executed every 1 hour
 on:
-  push:
-    branches: [ development ]
-  pull_request:
-    branches: [ master ]
+  schedule:
+    - cron: '0 * * * *'
 
 jobs:
   test:

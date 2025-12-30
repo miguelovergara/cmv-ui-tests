@@ -10,17 +10,17 @@ import java.util.stream.Collectors;
 public class HomePage {
     private WebDriver driver;
 
-    @FindBy(css = ".main-navigation li a")
+    @FindBy(xpath = "//ul[contains(@class, 'main-navigation')]//li/a")
     private List<WebElement> menuItems;
 
-    @FindBy(xpath = "//h1[contains(text(),'Centro Médico Veterinario Los Robles')]")
+    @FindBy(xpath = "//h1[contains(., 'Los Robles')] | //h2[contains(., 'Los Robles')]")
     private WebElement mainTitle;
 
-    @FindBy(css = ".contact-info")
-    private WebElement contactSection;
+    @FindBy(xpath = "//a[contains(@href, 'tel:')]")
+    private WebElement callButton;
 
-    @FindBy(linkText = "Servicios")
-    private WebElement servicesMenuLink;
+    @FindBy(xpath = "//a[contains(@href, 'wa.me') or contains(@href, 'whatsapp')]")
+    private WebElement whatsappButton;
 
     public HomePage(WebDriver driver) {
         this.driver = driver;
@@ -35,10 +35,23 @@ public class HomePage {
         return menuItems.stream()
                 .map(WebElement::getText)
                 .filter(t -> !t.isEmpty())
+                .map(String::trim)
                 .collect(Collectors.toList());
     }
 
-    public void clickServices() {
-        servicesMenuLink.click();
+    public boolean isCallButtonDisplayed() {
+        return callButton.isDisplayed();
+    }
+
+    public String getCallButtonHref() {
+        return callButton.getAttribute("href");
+    }
+
+    public boolean isWhatsappButtonDisplayed() {
+        return whatsappButton.isDisplayed();
+    }
+
+    public String getWhatsappButtonHref() {
+        return whatsappButton.getAttribute("href");
     }
 }

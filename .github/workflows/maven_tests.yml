@@ -1,0 +1,6 @@
+on:
+  schedule:
+    # This runs every 1 hour
+    - cron: '0 * * * *'
+  push:
+    branches: [ master ]

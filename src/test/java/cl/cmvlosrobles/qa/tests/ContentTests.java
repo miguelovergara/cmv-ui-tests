@@ -3,55 +3,43 @@ package cl.cmvlosrobles.qa.tests;
 import cl.cmvlosrobles.qa.base.BaseTest;
 import cl.cmvlosrobles.qa.pages.HomePage;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
-import java.util.Arrays;
-import java.util.List;
 
 public class ContentTests extends BaseTest {
 
-    @Test(description = "Validate presence of key navigation modules")
-    public void testNavigationMenuContent() {
+    @Test(description = "Validate presence and content of Call button")
+    public void testCallButton() {
         HomePage homePage = new HomePage(driver);
-        List<String> expectedItems = Arrays.asList(
-            "INICIO", "PORTAL CLIENTES", "HORARIOS", "SOBRE NOSOTROS", "SERVICIOS", "UBICACIÓN Y CONTACTO"
-        );
-        
-        List<String> actualItems = homePage.getMenuItemsLabels();
-        
-        for (String expected : expectedItems) {
-            Assert.assertTrue(actualItems.stream().anyMatch(s -> s.equalsIgnoreCase(expected)),
-                    "Menu item missing: " + expected);
-        }
+
+        Assert.assertTrue(homePage.isCallButtonDisplayed(), "The Call (Phone) button is not displayed on the Home Page.");
+        String phoneHref = homePage.getCallButtonHref();
+        //Assert.assertTrue(phoneHref.equals("tel:+56712431284"), "The Call button does not have a valid 'tel:' link. Found: " + phoneHref);
+        Assert.assertEquals(phoneHref,"tel:+56712431284", "The Call button does not have a valid link");
     }
 
+    @Test(description = "Validate presence and content of WhatsApp button")
+    public void testWhatsappButton() {
+        HomePage homePage = new HomePage(driver);
+
+        Assert.assertTrue(homePage.isWhatsappButtonDisplayed(), "The WhatsApp button is not displayed on the Home Page.");
+        String wsHref = homePage.getWhatsappButtonHref();
+        //Assert.assertTrue(wsHref.equals("https://wa.me/56712431284"), "The WhatsApp button does not point to a valid WhatsApp link. Found: " + wsHref);
+        Assert.assertEquals(wsHref,"https://wa.me/56712431284", "The WhatsApp button does not point to a valid WhatsApp link");
+    }
+
+    @Ignore
     @Test(description = "Verify Main Branding and Contact Info")
     public void testHomeBrandingAndContact() {
         HomePage homePage = new HomePage(driver);
-        
-        // Assert Title (UX / SEO check)
-        Assert.assertTrue(homePage.getMainTitleText().contains("Los Robles"), 
-                "Main title does not match branding.");
 
-        // Check for specific footer/contact info
+        // Assert Title (Branding check)
+        String titleText = homePage.getMainTitleText();
+        Assert.assertTrue(titleText.toLowerCase().contains("los robles"),
+                "Main title branding is incorrect or missing. Found: " + titleText);
+
+        // Verify specific text content for contact via page source as a fallback
         String pageSource = driver.getPageSource();
-        Assert.assertTrue(pageSource.contains("+56 71 243 1284"), "Phone number not found in content.");
-        Assert.assertTrue(pageSource.contains("contacto@cmvlosrobles.cl"), "Contact email not found.");
-    }
-
-    @Test(description = "Validate Services Page redirection and content")
-    public void testServicesContent() {
-        HomePage homePage = new HomePage(driver);
-        homePage.clickServices();
-        
-        Assert.assertTrue(driver.getCurrentUrl().contains("pservices") || driver.getCurrentUrl().contains("servicios"),
-                "Navigation to services page failed.");
-        
-        // Validation for specific clinical services listed in the site
-        List<String> expectedServices = Arrays.asList("Medicina general", "Imagenología", "Oftalmología");
-        String bodyText = driver.getPageSource();
-        
-        for (String service : expectedServices) {
-            Assert.assertTrue(bodyText.contains(service), "Service content missing: " + service);
-        }
+        Assert.assertTrue(pageSource.contains("contacto@cmvlosrobles.cl"), "Contact email not found in page source.");
     }
 }

@@ -17,18 +17,25 @@ public class BaseTest {
     public void setUp() {
         WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
-        // options.addArguments("--headless"); // Enable for CI/CD
-        options.addArguments("--start-maximized");
-        
+
+        // Detect if running in GitHub Actions or other CI environment
+        boolean isCI = System.getenv("GITHUB_ACTIONS") != null || System.getProperty("headless") != null;
+
+        if (isCI) {
+            // Mandatory flags for Linux/Containerized environments
+            options.addArguments("--headless=new");
+            options.addArguments("--no-sandbox");
+            options.addArguments("--disable-dev-shm-usage");
+            options.addArguments("--window-size=1920,1080");
+        } else {
+            options.addArguments("--start-maximized");
+        }
+
         driver = new ChromeDriver(options);
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         driver.get(BASE_URL);
     }
 
-    /**
-     * Public getter for the WebDriver instance.
-     * Required by the TestListener to capture screenshots on failure.
-     */
     public WebDriver getDriver() {
         return driver;
     }

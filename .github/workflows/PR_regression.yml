@@ -3,9 +3,9 @@ name: UI Regression Tests
 # to be executed on PR and merge
 on:
   push:
-    branches: [ development ]
+    branches: [ TEMPdevelopment ]
   pull_request:
-    branches: [ master ]
+    branches: [ TEMPmaster ]
 
 jobs:
   test:

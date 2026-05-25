@@ -24,4 +24,16 @@
             <class name="cl.cmvlosrobles.qa.tests.HomePageTests"/>
         </classes>
     </test>
+
+    <test name="Nuestro Equipo">
+        <classes>
+            <class name="cl.cmvlosrobles.qa.tests.NuestroEquipoTests"/>
+        </classes>
+    </test>
+
+    <test name="Nosotros">
+        <classes>
+            <class name="cl.cmvlosrobles.qa.tests.NosotrosTests"/>
+        </classes>
+    </test>
 </suite>

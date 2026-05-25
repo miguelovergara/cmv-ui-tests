@@ -1,9 +1,9 @@
 name: UI Cron Smoke Tests
 
-#to be executed every 1 hour
+#to be executed every Monday at 12:34 pm UTC
 on:
   schedule:
-    - cron: '34 12 1 1 1'
+    - cron: '34 12 * * 1'
 
 jobs:
   test:

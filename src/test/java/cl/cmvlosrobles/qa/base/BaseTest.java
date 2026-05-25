@@ -6,7 +6,6 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
-
 import java.time.Duration;
 
 public class BaseTest {
@@ -28,6 +27,7 @@ public class BaseTest {
             options.addArguments("--disable-dev-shm-usage");
             options.addArguments("--window-size=1920,1080");
         } else {
+            // maximized option for local execution
             options.addArguments("--start-maximized");
         }
 

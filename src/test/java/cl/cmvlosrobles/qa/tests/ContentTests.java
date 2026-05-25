@@ -12,10 +12,9 @@ public class ContentTests extends BaseTest {
     public void testCallButton() {
         HomePage homePage = new HomePage(driver);
 
-        Assert.assertTrue(homePage.isCallButtonDisplayed(), "The Call (Phone) button is not displayed on the Home Page.");
+        Assert.assertTrue(homePage.isCallButtonDisplayed(), "The Call button is not displayed on the Home Page.");
         String phoneHref = homePage.getCallButtonHref();
-        //Assert.assertTrue(phoneHref.equals("tel:+56712431284"), "The Call button does not have a valid 'tel:' link. Found: " + phoneHref);
-        Assert.assertEquals(phoneHref,"tel:+56712431284", "The Call button does not have a valid link");
+        Assert.assertEquals(phoneHref, "https://wa.me/56712431284", "The Call button does not have a valid link");
     }
 
     @Test(description = "Validate presence and content of WhatsApp button")

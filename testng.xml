@@ -18,4 +18,10 @@
             <class name="cl.cmvlosrobles.qa.tests.ContentTests"/>
         </classes>
     </test>
+
+    <test name="Home Page">
+        <classes>
+            <class name="cl.cmvlosrobles.qa.tests.HomePageTests"/>
+        </classes>
+    </test>
 </suite>

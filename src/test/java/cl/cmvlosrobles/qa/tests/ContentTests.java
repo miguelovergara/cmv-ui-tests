@@ -3,15 +3,21 @@ package cl.cmvlosrobles.qa.tests;
 import cl.cmvlosrobles.qa.base.BaseTest;
 import cl.cmvlosrobles.qa.pages.HomePage;
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 public class ContentTests extends BaseTest {
 
+    private HomePage homePage;
+
+    @BeforeMethod
+    public void initPage() {
+        homePage = new HomePage(driver);
+    }
+
     @Test(description = "Validate presence and content of Call button")
     public void testCallButton() {
-        HomePage homePage = new HomePage(driver);
-
         Assert.assertTrue(homePage.isCallButtonDisplayed(), "The Call button is not displayed on the Home Page.");
         String phoneHref = homePage.getCallButtonHref();
         Assert.assertEquals(phoneHref, "https://wa.me/56712431284", "The Call button does not have a valid link");
@@ -19,8 +25,6 @@ public class ContentTests extends BaseTest {
 
     @Test(description = "Validate presence and content of WhatsApp button")
     public void testWhatsappButton() {
-        HomePage homePage = new HomePage(driver);
-
         Assert.assertTrue(homePage.isWhatsappButtonDisplayed(), "The WhatsApp button is not displayed on the Home Page.");
         String wsHref = homePage.getWhatsappButtonHref();
         //Assert.assertTrue(wsHref.equals("https://wa.me/56712431284"), "The WhatsApp button does not point to a valid WhatsApp link. Found: " + wsHref);
@@ -30,8 +34,6 @@ public class ContentTests extends BaseTest {
     @Ignore
     @Test(description = "Verify Main Branding and Contact Info")
     public void testHomeBrandingAndContact() {
-        HomePage homePage = new HomePage(driver);
-
         // Assert Title (Branding check)
         String titleText = homePage.getMainTitleText();
         Assert.assertTrue(titleText.toLowerCase().contains("los robles"),

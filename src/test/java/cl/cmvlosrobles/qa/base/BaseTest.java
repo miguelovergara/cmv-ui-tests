@@ -1,6 +1,5 @@
 package cl.cmvlosrobles.qa.base;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -10,11 +9,13 @@ import java.time.Duration;
 
 public class BaseTest {
     protected WebDriver driver;
-    protected final String BASE_URL = "https://cmvlosrobles.cl";
+    protected final String BASE_URL = "https://cmvlosrobles.cl/";
+
+    // Milliseconds to wait after page navigation before interacting with the page
+    protected static final long PAGE_LOAD_WAIT_MS = 1000;
 
     @BeforeMethod
     public void setUp() {
-        WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
 
         // Detect if running in GitHub Actions or other CI environment
@@ -33,7 +34,24 @@ public class BaseTest {
 
         driver = new ChromeDriver(options);
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-        driver.get(BASE_URL);
+        navigateTo();
+    }
+
+    protected void navigateTo() {
+        navigateTo("");
+    }
+
+    protected void navigateTo(String path) {
+        navigateToUrl(BASE_URL + path);
+    }
+
+    protected void navigateToUrl(String url) {
+        driver.get(url);
+        try {
+            Thread.sleep(PAGE_LOAD_WAIT_MS);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 
     public WebDriver getDriver() {

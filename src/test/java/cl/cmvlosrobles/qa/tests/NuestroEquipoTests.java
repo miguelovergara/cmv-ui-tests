@@ -10,37 +10,36 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Feature("Nuestro Equipo")
 public class NuestroEquipoTests extends BaseTest {
 
-    private static final String EQUIPO_URL = "https://cmvlosrobles.cl/nuestro-equipo/";
+    private static final String EQUIPO_PATH = "nuestro-equipo";
 
     private static final Object[][] TEAM_MEMBERS = {
-        {"Constanza Issotta Contardo", "Médica Veterinaria",   "https://cmvlosrobles.cl/constanza-issotta-contardo/"},
-        {"Juan Ignacio Lara Luna",     "Médico Veterinario",   "https://cmvlosrobles.cl/juan-lara-luna/"},
-        {"Camila Infante",             "Médica Veterinaria",   "https://cmvlosrobles.cl/camila-infante-basay/"},
-        {"Jenifer Manriquez",          "Médica Veterinaria",   "https://cmvlosrobles.cl/jenifer-manriquez-poblete/"},
-        {"Ana Bastías Bravo",          "Médica Veterinaria",   "https://cmvlosrobles.cl/ana-bastias-bravo/"},
-        {"Andrea Nuñez Bustamante",    "Médica Veterinaria",   "https://cmvlosrobles.cl/andrea-nunez-bustamante/"},
-        {"Marisol Agurto Merino",      "Médica Veterinaria",   "https://cmvlosrobles.cl/marisol-agurto-merino/"},
-        {"Kevin Sura",                 "Médico Veterinario",   "https://cmvlosrobles.cl/kevin-sura-galdames/"},
-        {"Claudia Rivera Bravo",       "Médica Veterinaria",   "https://cmvlosrobles.cl/claudia-rivera-bravo/"},
-        {"Miguel Vergara Martinez",    "Administración",       "https://cmvlosrobles.cl/miguel-vergara-martinez/"},
-        {"Consuelo Pérez Miranda",     "Médica Veterinaria",   "https://cmvlosrobles.cl/consuelo-perez-miranda/"},
-        {"Rocío Aravena Ávila",        "Médica Veterinaria",   "https://cmvlosrobles.cl/rocio-aravena-avila/"},
-        {"Fernanda Rojas Valenzuela",  "Médica Veterinaria",   "https://cmvlosrobles.cl/fernanda-rojas-valenzuela/"},
-        {"Camila Sánchez González",    "Médica Veterinaria",   "https://cmvlosrobles.cl/camila-sanchez-gonzalez/"},
-        {"Fabian Hidalgo Sandoval",    "Médica Veterinaria",   "https://cmvlosrobles.cl/fabian-hidalgo-sandoval/"},
+            {"Constanza Issotta Contardo", "Médica Veterinaria",   "constanza-issotta-contardo/"},
+            {"Juan Ignacio Lara Luna",     "Médico Veterinario",   "juan-lara-luna/"},
+            {"Camila Infante",             "Médica Veterinaria",   "camila-infante-basay/"},
+            {"Jenifer Manriquez",          "Médica Veterinaria",   "jenifer-manriquez-poblete/"},
+            {"Ana Bastías Bravo",          "Médica Veterinaria",   "ana-bastias-bravo/"},
+            {"Andrea Nuñez Bustamante",    "Médica Veterinaria",   "andrea-nunez-bustamante/"},
+            {"Marisol Agurto Merino",      "Médica Veterinaria",   "marisol-agurto-merino/"},
+            {"Kevin Sura",                 "Médico Veterinario",   "kevin-sura-galdames/"},
+            {"Claudia Rivera Bravo",       "Médica Veterinaria",   "claudia-rivera-bravo/"},
+            {"Miguel Vergara Martinez",    "Administración",       "miguel-vergara-martinez/"},
+            {"Consuelo Pérez Miranda",     "Médica Veterinaria",   "consuelo-perez-miranda/"},
+            {"Rocío Aravena Ávila",        "Médica Veterinaria",   "rocio-aravena-avila/"},
+            {"Fernanda Rojas Valenzuela",  "Médica Veterinaria",   "fernanda-rojas-valenzuela/"},
+            {"Camila Sánchez González",    "Médica Veterinaria",   "camila-sanchez-gonzalez/"},
+            {"Fabian Hidalgo Sandoval",    "Médico Veterinario",   "fabian-hidalgo-sandoval/"},
     };
 
     private NuestroEquipoPage equipoPage;
 
     @BeforeMethod
     public void goToEquipoPage() {
-        driver.get(EQUIPO_URL);
+        navigateTo(EQUIPO_PATH);
         equipoPage = new NuestroEquipoPage(driver);
     }
 
@@ -108,7 +107,7 @@ public class NuestroEquipoTests extends BaseTest {
     public void testAllCardProfileUrls() {
         List<String> actualUrls = equipoPage.getProfileUrls();
         for (Object[] member : TEAM_MEMBERS) {
-            String expectedUrl = (String) member[2];
+            String expectedUrl = BASE_URL + (String) member[2];
             Assert.assertTrue(actualUrls.contains(expectedUrl),
                     "Profile URL missing for " + member[0] + ": " + expectedUrl);
         }
@@ -128,13 +127,13 @@ public class NuestroEquipoTests extends BaseTest {
         dataProvider = "teamMembers",
         description = "Profile page loads and shows name, image, and role"
     )
-    public void testProfilePage(String expectedName, String expectedRole, String profileUrl) {
-        driver.get(profileUrl);
+    public void testProfilePage(String expectedName, String expectedRole, String profilePath) {
+        navigateTo(profilePath);
         TeamMemberPage profilePage = new TeamMemberPage(driver);
 
         // Page loaded at correct URL
         Assert.assertTrue(driver.getCurrentUrl().contains(
-                profileUrl.replace("https://cmvlosrobles.cl", "")),
+                profilePath.replace("https://cmvlosrobles.cl", "")),
                 "Profile page URL mismatch for " + expectedName);
 
         // Profile photo present and loaded

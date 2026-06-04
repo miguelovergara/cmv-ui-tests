@@ -13,13 +13,12 @@ import java.util.List;
 @Feature("Nosotros")
 public class NosotrosTests extends BaseTest {
 
-    private static final String NOSOTROS_URL = "https://cmvlosrobles.cl/nosotros/";
-
+    private static final String NOSOTROS_PATH = "nosotros";
     private NosotrosPage page;
 
     @BeforeMethod
     public void goToNosotros() {
-        driver.get(NOSOTROS_URL);
+        navigateTo(NOSOTROS_PATH);
         page = new NosotrosPage(driver);
     }
 

@@ -3,9 +3,14 @@ package cl.cmvlosrobles.qa.base;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.devtools.DevTools;
+import org.openqa.selenium.devtools.v148.network.Network;
+import org.openqa.selenium.devtools.v148.network.model.Headers;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import java.time.Duration;
+import java.util.Map;
+import java.util.Optional;
 
 public class BaseTest {
     protected WebDriver driver;
@@ -13,6 +18,8 @@ public class BaseTest {
 
     // Milliseconds to wait after page navigation before interacting with the page
     protected static final long PAGE_LOAD_WAIT_MS = 1000;
+
+    private static final String CF_TEST_TOKEN = "019e98b4-9ad9-7d99-a5f2-e6163a3951f8";
 
     @BeforeMethod
     public void setUp() {
@@ -32,8 +39,16 @@ public class BaseTest {
             options.addArguments("--start-maximized");
         }
 
-        driver = new ChromeDriver(options);
+        ChromeDriver chromeDriver = new ChromeDriver(options);
+        driver = chromeDriver;
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+
+        // Inject bypass header so Cloudflare WAF rule allows CI runner IPs
+        DevTools devTools = chromeDriver.getDevTools();
+        devTools.createSession();
+        devTools.send(Network.enable(Optional.empty(), Optional.empty(), Optional.empty()));
+        devTools.send(Network.setExtraHTTPHeaders(new Headers(Map.of("X-Test-Token", CF_TEST_TOKEN))));
+
         navigateTo();
     }
 

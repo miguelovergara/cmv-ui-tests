@@ -40,9 +40,13 @@ public class BaseTest {
         // Inject Cloudflare WAF bypass header if token is available in the environment
         String cfToken = System.getenv("CF_TEST_TOKEN");
         if (cfToken != null && !cfToken.isEmpty()) {
+            System.out.println("[CF] CF_TEST_TOKEN found (length=" + cfToken.length() + "), injecting X-Test-Token header via CDP");
             chromeDriver.executeCdpCommand("Network.enable", Map.of());
             chromeDriver.executeCdpCommand("Network.setExtraHTTPHeaders",
                     Map.of("headers", Map.of("X-Test-Token", cfToken)));
+            System.out.println("[CF] X-Test-Token header injected successfully");
+        } else {
+            System.out.println("[CF] WARNING: CF_TEST_TOKEN not set — X-Test-Token header will NOT be sent. Cloudflare may block requests.");
         }
 
         navigateTo();

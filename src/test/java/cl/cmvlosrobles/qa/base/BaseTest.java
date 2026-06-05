@@ -11,6 +11,7 @@ import java.util.Map;
 public class BaseTest {
     protected WebDriver driver;
     protected final String BASE_URL = "https://cmvlosrobles.cl/";
+    private boolean cfTokenEnabled = false;
 
     // Milliseconds to wait after page navigation before interacting with the page
     protected static final long PAGE_LOAD_WAIT_MS = 1000;
@@ -45,6 +46,7 @@ public class BaseTest {
             chromeDriver.executeCdpCommand("Network.setExtraHTTPHeaders",
                     Map.of("headers", Map.of("x-test-token", cfToken)));
             System.out.println("[CF] X-Test-Token header injected successfully");
+            cfTokenEnabled = true;
         } else {
             System.out.println("[CF] WARNING: CF_TEST_TOKEN not set. x-test-token header will NOT be sent. Cloudflare may block requests.");
         }
@@ -61,6 +63,9 @@ public class BaseTest {
     }
 
     protected void navigateToUrl(String url) {
+        if (cfTokenEnabled) {
+            url += (url.contains("?") ? "&" : "?") + "x-test-token=true";
+        }
         driver.get(url);
         try {
             Thread.sleep(PAGE_LOAD_WAIT_MS);

@@ -19,6 +19,8 @@ jobs:
         cache: maven
 
     - name: Run UI Tests
+      env:
+        CF_TEST_TOKEN: ${{ secrets.CF_TEST_TOKEN }}
       run: mvn clean test -Dbrowser=chrome --batch-mode
 
     - name: Upload Test Results

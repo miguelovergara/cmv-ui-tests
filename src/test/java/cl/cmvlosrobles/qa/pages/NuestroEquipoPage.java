@@ -52,18 +52,25 @@ public class NuestroEquipoPage {
     }
 
     public List<Boolean> getAllCardImageLoadStatus() {
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+
         // Scroll the full page so lazy-loaded images below the fold get fetched
-        ((JavascriptExecutor) driver).executeScript("window.scrollTo(0, document.body.scrollHeight);");
-        try { Thread.sleep(1500); } catch (InterruptedException ignored) {}
-        ((JavascriptExecutor) driver).executeScript("window.scrollTo(0, 0);");
+        js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+        try { Thread.sleep(500); } catch (InterruptedException ignored) {}
+        js.executeScript("window.scrollTo(0, 0);");
 
         return teamMemberBlurbs.stream()
                 .map(b -> {
                     List<WebElement> imgs = b.findElements(By.cssSelector(".et_pb_main_blurb_image img"));
                     if (imgs.isEmpty()) return false;
-                    Long w = (Long) ((JavascriptExecutor) driver)
-                            .executeScript("return arguments[0].naturalWidth;", imgs.get(0));
-                    return w != null && w > 0;
+                    WebElement img = imgs.get(0);
+                    long deadline = System.currentTimeMillis() + 15000;
+                    while (System.currentTimeMillis() < deadline) {
+                        Long w = (Long) js.executeScript("return arguments[0].naturalWidth;", img);
+                        if (w != null && w > 0) return true;
+                        try { Thread.sleep(300); } catch (InterruptedException ignored) {}
+                    }
+                    return false;
                 })
                 .collect(Collectors.toList());
     }

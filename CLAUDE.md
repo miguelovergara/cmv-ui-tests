@@ -36,11 +36,11 @@ Selenium/TestNG UI test suite for `https://cmvlosrobles.cl`. Java 11, Maven buil
 
 ## CI/CD
 
-Two GitHub Actions workflows in `.github/workflows/`:
+GitHub Actions workflows in `.github/workflows/`:
 
 | File | Trigger | Purpose |
 |------|---------|---------|
-| `PR_regression.yml` | push to `development`, PR to `master` | Regression on PRs |
-| `cron_smoke.yml` | hourly (`0 * * * *`) | Continuous smoke monitoring |
+| `cron_smoke.yml` | Every Monday at 12:34 UTC | Scheduled full suite run |
+| `manual_run.yml` | `workflow_dispatch` (Actions tab → "Run workflow") | On-demand full suite run |
 
-Both upload `target/surefire-reports/` as artifacts. No extra flags needed in the workflow commands — BaseTest auto-applies headless/sandbox options when it detects the `GITHUB_ACTIONS` environment variable.
+All workflows upload `target/surefire-reports/` as artifacts. No extra flags needed — BaseTest auto-applies headless/sandbox options when it detects the `GITHUB_ACTIONS` environment variable.

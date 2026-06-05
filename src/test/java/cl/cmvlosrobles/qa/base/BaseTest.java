@@ -3,14 +3,10 @@ package cl.cmvlosrobles.qa.base;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.devtools.DevTools;
-import org.openqa.selenium.devtools.v148.network.Network;
-import org.openqa.selenium.devtools.v148.network.model.Headers;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import java.time.Duration;
 import java.util.Map;
-import java.util.Optional;
 
 public class BaseTest {
     protected WebDriver driver;
@@ -44,10 +40,9 @@ public class BaseTest {
         // Inject Cloudflare WAF bypass header if token is available in the environment
         String cfToken = System.getenv("CF_TEST_TOKEN");
         if (cfToken != null && !cfToken.isEmpty()) {
-            DevTools devTools = chromeDriver.getDevTools();
-            devTools.createSession();
-            devTools.send(Network.enable(Optional.empty(), Optional.empty(), Optional.empty()));
-            devTools.send(Network.setExtraHTTPHeaders(new Headers(Map.of("X-Test-Token", cfToken))));
+            chromeDriver.executeCdpCommand("Network.enable", Map.of());
+            chromeDriver.executeCdpCommand("Network.setExtraHTTPHeaders",
+                    Map.of("headers", Map.of("X-Test-Token", cfToken)));
         }
 
         navigateTo();

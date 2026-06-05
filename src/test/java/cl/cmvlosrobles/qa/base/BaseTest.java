@@ -19,8 +19,6 @@ public class BaseTest {
     // Milliseconds to wait after page navigation before interacting with the page
     protected static final long PAGE_LOAD_WAIT_MS = 1000;
 
-    private static final String CF_TEST_TOKEN = "019e98b4-9ad9-7d99-a5f2-e6163a3951f8";
-
     @BeforeMethod
     public void setUp() {
         ChromeOptions options = new ChromeOptions();
@@ -43,11 +41,14 @@ public class BaseTest {
         driver = chromeDriver;
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 
-        // Inject bypass header so Cloudflare WAF rule allows CI runner IPs
-        DevTools devTools = chromeDriver.getDevTools();
-        devTools.createSession();
-        devTools.send(Network.enable(Optional.empty(), Optional.empty(), Optional.empty()));
-        devTools.send(Network.setExtraHTTPHeaders(new Headers(Map.of("X-Test-Token", CF_TEST_TOKEN))));
+        // Inject Cloudflare WAF bypass header if token is available in the environment
+        String cfToken = System.getenv("CF_TEST_TOKEN");
+        if (cfToken != null && !cfToken.isEmpty()) {
+            DevTools devTools = chromeDriver.getDevTools();
+            devTools.createSession();
+            devTools.send(Network.enable(Optional.empty(), Optional.empty(), Optional.empty()));
+            devTools.send(Network.setExtraHTTPHeaders(new Headers(Map.of("X-Test-Token", cfToken))));
+        }
 
         navigateTo();
     }
